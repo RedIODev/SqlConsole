@@ -21,42 +21,59 @@ pub mod cursor {
 
     pub const HOME: &str = concatcp! {basic::ESCB, "H"};
 
-    pub fn move_to(line: i32, column: i32) -> String {
-        format!("{}{};{}H", basic::ESCB, line, column)
+    #[macro_export]
+    macro_rules! move_to {
+        ($line:expr, $column:expr) => {
+            const LINE: i32 = $line;
+            const COLUMN: i32 = $column;
+            ::const_format::formatcp!("{}{};{}H", $crate::console::ansi::basic::ESCB, LINE,COLUMN)
+        };
     }
 
-    pub fn move_up(lines: i32) -> String {
-        format!("{}{}A", basic::ESCB, lines)
+    #[macro_export]
+    macro_rules! move_up {
+        ($lines:expr) => {{
+            const LINES: i32 = $lines;
+            ::const_format::formatcp!("{}{}A", $crate::console::ansi::basic::ESCB, LINES)
+        }};
     }
 
-    pub fn move_down(lines: i32) -> String {
-        format!("{}{}B", basic::ESCB, lines)
+    #[macro_export]
+    macro_rules! move_down {
+        ($lines:expr) => {{
+            const LINES: i32 = $lines;
+            ::const_format::formatcp!("{}{}B", $crate::console::ansi::basic::ESCB, LINES)
+        }};
     }
 
-    pub fn move_right(columns: i32) -> String {
-        format!("{}{}C", basic::ESCB, columns)
+    #[macro_export]
+    macro_rules! move_right {
+        ($columns:expr) => {{
+            const COLUMNS: i32 = $columns;
+            ::const_format::formatcp!("{}{}C", $crate::console::ansi::basic::ESCB, COLUMNS)
+        }};
     }
 
-    pub fn move_left(columns: i32) -> String {
-        format!("{}{}D", basic::ESCB, columns)
+    #[macro_export]
+    macro_rules! move_left {
+        ($columns:expr) => {{
+            const COLUMNS: i32 = $columns;
+            ::const_format::formatcp!("{}{}D", $crate::console::ansi::basic::ESCB, COLUMNS)
+        }};
     }
 
-    pub fn move_start_up(lines: i32) -> String {
-        format!("{}{}E", basic::ESCB, lines)
-    }
-
-    pub fn move_start_down(lines: i32) -> String {
-        format!("{}{}F", basic::ESCB, lines)
-    }
-
-    pub fn move_column(column: i32) -> String {
-        format!("{}{}G", basic::ESCB, column)
+    #[macro_export]
+    macro_rules! move_start_up {
+        ($lines:expr) => {{
+            const LINES: i32 = $lines;
+            ::const_format::formatcp!("{}{}E", $crate::console::ansi::basic::ESCB, LINES)
+        }};
     }
 
     #[macro_export]
     macro_rules! move_start_down {
         ($lines:expr) => {{
-            const LINES: i32 = $column;
+            const LINES: i32 = $lines;
             ::const_format::formatcp!("{}{}F", $crate::console::ansi::basic::ESCB, LINES)
         }};
     }

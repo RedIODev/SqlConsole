@@ -1,7 +1,7 @@
-use sql_console::console::constants::PROMPT;
+use sql_console::console::constants::prompt;
 
-//const s : & str = set_foreground_color!(1,2,3);
 
-fn main() {
-    println!("{}Hello, world!",PROMPT);
+
+fn main()  {
+    println!("{}",prompt("DemoUser","DemoServer","~"));
 }
