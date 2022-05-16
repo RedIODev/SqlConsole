@@ -77,7 +77,7 @@
     }
     
     pub mod font {
-        use const_format::concatcp;
+        use const_format::{concatcp, formatcp};
 
         use crate::console::ansi::basic;
 
@@ -106,11 +106,15 @@
         
         #[macro_export]
         macro_rules! set_foreground_color {
-            ($red:expr, $green:expr, $blue:expr,$a:tt) => {
-                $crate::console::ansi::font::set_foreground_color_impl::<$a>($red, $green, $blue)
+            ($red:expr, $green:expr, $blue:expr) => {
+                $crate::console::ansi::font::set_foreground_color_impl::<$red, $green, $blue>()
             };
         }
-        pub fn set_foreground_color_impl<'a>(red:i32,green:i32,blue:i32) -> &'a str {
+
+        pub const fn set_foreground_color_impl<const red:i32,const green:i32,const blue:i32>() -> &'static str {
+            formatcp!("{}38;2;{};{};{}m",basic::ESCB ,red,green,blue)
+        }
+        pub fn set_foreground_color<'a>(red:i32,green:i32,blue:i32) -> &'a str {
             format!("{}38;2;{};{};{}m",basic::ESCB ,red,green,blue).as_str()
             
         }
