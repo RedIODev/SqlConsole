@@ -1,15 +1,16 @@
 
 use std::{error::Error, fmt::Display};
 
-use self::constants::{COLOR_DB, COLOR_NORMAL, COLOR_USER};
+use self::constants::{COLOR_DB, COLOR_NORMAL, COLOR_USER, COLOR_PREFIX};
 
 pub mod ansi;
 pub mod constants;
+pub mod sql;
 
 pub fn prompt(username: &str, hostname: &str, database: &str) -> String {
     format!(
-        "{}{}@{}{}:{}{}{}$ ",
-        COLOR_USER, username, hostname, COLOR_NORMAL, COLOR_DB, database, COLOR_NORMAL
+        "{}DB {}{}@{}{}:{}{}{}$ ",
+        COLOR_PREFIX ,COLOR_USER, username, hostname, COLOR_NORMAL, COLOR_DB, database, COLOR_NORMAL
     )
 }
 
