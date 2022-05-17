@@ -8,3 +8,5 @@ edition = "2021"
 [dependencies]
 #const-concat = "0.1.0"
 const_format = "0.2.23"
+rpassword = "6.0.1"
+mysql = "22.1.0"
