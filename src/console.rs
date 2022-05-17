@@ -31,7 +31,7 @@ pub fn username_hostname_prompt() -> ErrResult<(String, String)> {
     Ok((username, hostname))
 }
 
-pub fn evaluate_command(sql_data:&mut SqlData, input:&str) -> ErrResult<()> {
+pub fn evaluate_command(sql_data:&mut SqlData, input:&str) {
     let input = input.trim_end();
     match input {
         "exit" => {
@@ -53,8 +53,7 @@ pub fn evaluate_command(sql_data:&mut SqlData, input:&str) -> ErrResult<()> {
         s => {
             println!("Invalid command: \"{}\"",s.trim_start().split_terminator(" ").next().unwrap())
         }
-    }
-    Ok(())
+    };
 }
 
 fn input() -> ErrResult<String> {

@@ -23,6 +23,6 @@ fn main() -> ErrResult<()> {
             &sql_data.hostname,
             sql_data.database.as_deref(),
         )?;
-        evaluate_command(&mut sql_data, &input)?;
+        evaluate_command(&mut sql_data, &input);
     }
 }
