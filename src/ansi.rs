@@ -17,72 +17,72 @@ pub mod basic {
 pub mod cursor {
     use const_format::concatcp;
 
-    use crate::console::ansi::basic;
+    use crate::ansi::basic;
 
     pub const HOME: &str = concatcp! {basic::ESCB, "H"};
 
     #[macro_export]
     macro_rules! move_to {
         ($line:expr, $column:expr) => {
-            const LINE: i32 = $line;
-            const COLUMN: i32 = $column;
-            ::const_format::formatcp!("{}{};{}H", $crate::console::ansi::basic::ESCB, LINE,COLUMN)
+            const LINE: u32 = $line;
+            const COLUMN: u32 = $column;
+            ::const_format::formatcp!("{}{};{}H", $crate::ansi::basic::ESCB, LINE,COLUMN)
         };
     }
 
     #[macro_export]
     macro_rules! move_up {
         ($lines:expr) => {{
-            const LINES: i32 = $lines;
-            ::const_format::formatcp!("{}{}A", $crate::console::ansi::basic::ESCB, LINES)
+            const LINES: u32 = $lines;
+            ::const_format::formatcp!("{}{}A", $crate::ansi::basic::ESCB, LINES)
         }};
     }
 
     #[macro_export]
     macro_rules! move_down {
         ($lines:expr) => {{
-            const LINES: i32 = $lines;
-            ::const_format::formatcp!("{}{}B", $crate::console::ansi::basic::ESCB, LINES)
+            const LINES: u32 = $lines;
+            ::const_format::formatcp!("{}{}B", $crate::ansi::basic::ESCB, LINES)
         }};
     }
 
     #[macro_export]
     macro_rules! move_right {
         ($columns:expr) => {{
-            const COLUMNS: i32 = $columns;
-            ::const_format::formatcp!("{}{}C", $crate::console::ansi::basic::ESCB, COLUMNS)
+            const COLUMNS: u32 = $columns;
+            ::const_format::formatcp!("{}{}C", $crate::ansi::basic::ESCB, COLUMNS)
         }};
     }
 
     #[macro_export]
     macro_rules! move_left {
         ($columns:expr) => {{
-            const COLUMNS: i32 = $columns;
-            ::const_format::formatcp!("{}{}D", $crate::console::ansi::basic::ESCB, COLUMNS)
+            const COLUMNS: u32 = $columns;
+            ::const_format::formatcp!("{}{}D", $crate::ansi::basic::ESCB, COLUMNS)
         }};
     }
 
     #[macro_export]
     macro_rules! move_start_up {
         ($lines:expr) => {{
-            const LINES: i32 = $lines;
-            ::const_format::formatcp!("{}{}E", $crate::console::ansi::basic::ESCB, LINES)
+            const LINES: u32 = $lines;
+            ::const_format::formatcp!("{}{}E", $crate::ansi::basic::ESCB, LINES)
         }};
     }
 
     #[macro_export]
     macro_rules! move_start_down {
         ($lines:expr) => {{
-            const LINES: i32 = $lines;
-            ::const_format::formatcp!("{}{}F", $crate::console::ansi::basic::ESCB, LINES)
+            const LINES: u32 = $lines;
+            ::const_format::formatcp!("{}{}F", $crate::ansi::basic::ESCB, LINES)
         }};
     }
 
     #[macro_export]
     macro_rules! move_column {
         ($column:expr) => {{
-            const COLUMN: i32 = $column;
-            ::const_format::formatcp!("{}{}G", $crate::console::ansi::basic::ESCB, COLUMN)
+            const COLUMN: u32 = $column;
+            ::const_format::formatcp!("{}{}G", $crate::ansi::basic::ESCB, COLUMN)
         }};
     }
 
@@ -95,7 +95,7 @@ pub mod cursor {
 pub mod erase {
     use const_format::concatcp;
 
-    use crate::console::ansi::basic;
+    use crate::ansi::basic;
 
     pub const ALL_AFTER_CUR: &str = concatcp! {basic::ESCB, "0J"};
     pub const ALL_BEFORE_CUR: &str = concatcp! {basic::ESCB, "1J"};
@@ -109,13 +109,13 @@ pub mod erase {
 pub mod font {
     use const_format::concatcp;
 
-    use crate::console::ansi::basic;
+    use crate::ansi::basic;
 
     #[macro_export]
     macro_rules! set_graphics_mode {
         ($mode:expr) => {{
             const MODE: &str = $mode;
-            ::const_format::formatcp!("{}1;34;{}m", $crate::console::ansi::basic::ESCB, MODE)
+            ::const_format::formatcp!("{}1;34;{}m", $crate::ansi::basic::ESCB, MODE)
         }};
     }
 
@@ -139,12 +139,12 @@ pub mod font {
     #[macro_export]
     macro_rules! set_foreground_color {
         ($red:expr, $green:expr, $blue:expr) => {{
-            const RED: i32 = $red;
-            const GREEN: i32 = $green;
-            const BLUE: i32 = $blue;
+            const RED: u8 = $red;
+            const GREEN: u8 = $green;
+            const BLUE: u8 = $blue;
             ::const_format::formatcp!(
                 "{}38;2;{};{};{}m",
-                $crate::console::ansi::basic::ESCB,
+                $crate::ansi::basic::ESCB,
                 RED,
                 GREEN,
                 BLUE
@@ -155,12 +155,12 @@ pub mod font {
     #[macro_export]
     macro_rules! set_background_color {
         ($red:literal, $green:literal, $blue:literal) => {{
-            const RED: i32 = $red;
-            const GREEN: i32 = $green;
-            const BLUE: i32 = $blue;
+            const RED: u8 = $red;
+            const GREEN: u8 = $green;
+            const BLUE: u8 = $blue;
             ::const_format::formatcp!(
                 "{}48;2;{};{};{}m",
-                $crate::console::ansi::basic::ESCB,
+                $crate::ansi::basic::ESCB,
                 RED,
                 GREEN,
                 BLUE
@@ -175,7 +175,7 @@ pub mod font {
 pub mod misc {
     use const_format::concatcp;
 
-    use crate::console::ansi::basic;
+    use crate::ansi::basic;
 
     pub const INVISIBLE_CUR: &str = concatcp! {basic::ESCB, "?25l"};
     pub const VISIBLE_CUR: &str = concatcp! {basic::ESCB, "?25h"};
