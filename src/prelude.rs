@@ -5,8 +5,8 @@ use crate::set_foreground_color;
 pub const COLOR_USER: &str = set_foreground_color!(22, 198, 12);
 pub const COLOR_DB: &str = set_foreground_color!(59, 120, 255);
 pub const COLOR_NORMAL: &str = set_foreground_color!(204, 204, 204);
-pub const COLOR_CONNECTED: &str = set_foreground_color!(0, 255, 255);
-pub const COLOR_DISCONNECTED: &str = set_foreground_color!(206,10,24);
+pub const COLOR_LOGO: &str = set_foreground_color!(199,103,57);
+pub const COLOR_ERROR: &str = set_foreground_color!(197,15,31);
 
 pub fn get_validated_env_args() -> ErrResult<Option<(String, String,u16)>> {
     let args = env::args();
@@ -22,7 +22,7 @@ pub fn get_validated_env_args() -> ErrResult<Option<(String, String,u16)>> {
     let second = args.next();
 
     let error: Box<GenericError> = Box::<GenericError>::new(
-        String::from("Invalid number of arguments. Expected 0 or 3.").into(),
+        "Invalid number of arguments. Expected 0 or 3.".to_owned().into(),
     );
 
     if second == None {

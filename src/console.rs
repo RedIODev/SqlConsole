@@ -12,7 +12,7 @@ use super::prelude::*;
 pub fn prompt(sql_data:&SqlData) -> ErrResult<String> {
     print!(
         "{}MYSQL {}{}@{}:{}{}:{}{}{}$ ",
-        if sql_data.connection.is_some() {COLOR_CONNECTED} else {COLOR_DISCONNECTED},
+        COLOR_LOGO,
         COLOR_USER,
         sql_data.username,
         sql_data.hostname,
@@ -39,19 +39,11 @@ pub fn username_hostname_port_prompt() -> ErrResult<(String, String, u16)> {
     print!("Hostname: ");
     std::io::stdout().flush()?;
     let hostname = input()?;
-    let port = loop {
-        print!("Port: ");
-        std::io::stdout().flush()?;
-        let input = input()?;
-        if let Ok(port) = input.parse::<u16>() {
-            break port;
-        }
-        println!("Invalid port \"{}\". Only 0-65535 are valid.", input);
-    };
+    let port = input_port()?;
     Ok((username, hostname, port))
 }
 
-pub fn evaluate_command(sql_data: &mut SqlData, input: &str) {
+pub fn evaluate_command(sql_data: &mut SqlData, input: &str) -> ErrResult<()> {
     let input = input.trim_end();
     match input {
         "exit" => {
@@ -60,12 +52,27 @@ pub fn evaluate_command(sql_data: &mut SqlData, input: &str) {
         }
 
         s if s.starts_with("cd") => {
-            let arg = s.strip_prefix("cd").unwrap().trim_start().trim_end();
+            let arg = trim_arg(s,"cd");
             sql_data.database = if arg.is_empty() {
                 None
             } else {
                 Some(arg.to_owned())
             };
+        }
+
+        s if s.starts_with("cu") => {
+            let arg = trim_arg(s, "cu");
+            sql_data.username = arg.to_owned();
+            sql_data.password = password_prompt(&sql_data.username,&sql_data.hostname,sql_data.port)?;
+        }
+
+        s if s.starts_with("ch") => {
+            let arg = trim_arg(s, "ch");
+            sql_data.hostname = arg.to_owned();
+        }
+
+        s if s.starts_with("cp") => {
+            sql_data.port = input_port()?;
         }
 
         s if s.starts_with("cls") => {
@@ -74,24 +81,31 @@ pub fn evaluate_command(sql_data: &mut SqlData, input: &str) {
 
         s if s.trim_start().trim_end().is_empty() => {}
 
-        s if s.starts_with("con") => {
-            sql_data.connect();
-        }
-
-        s if s.starts_with("#") => {
-
-        }
         s => {
-            println!(
-                "Invalid command: \"{}\"",
-                s.trim_start().split_terminator(" ").next().unwrap()
-            )
+            sql_data.evaluate_sql(s)?;
         }
     };
+    Ok(())
 }
 
 fn input() -> ErrResult<String> {
     let mut buf = String::new();
     std::io::stdin().read_line(&mut buf)?;
     Ok(buf.trim().to_owned())
+}
+
+fn trim_arg<'a>(input: &'a str, command: &str) -> &'a str {
+    input.strip_prefix(command).unwrap().trim_start().trim_end()
+}
+
+fn input_port() -> ErrResult<u16> {
+    Ok(loop {
+        print!("Port: ");
+        std::io::stdout().flush()?;
+        let input = input()?;
+        if let Ok(port) = input.parse::<u16>() {
+            break port;
+        }
+        println!("Invalid port \"{}\". Only 0-65535 are valid.", input);
+    })
 }

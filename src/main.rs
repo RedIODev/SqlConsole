@@ -17,10 +17,12 @@ fn main() -> ErrResult<()> {
         port,
         password,
         database: None,
-        connection: None,
     };
+    sql_data.connect()?;
     loop {
         let input = prompt(&sql_data)?;
-        evaluate_command(&mut sql_data, &input);
+        if let Err(e) = evaluate_command(&mut sql_data, &input) {
+            println!("{}{}",COLOR_ERROR, e);
+        }
     }
 }
